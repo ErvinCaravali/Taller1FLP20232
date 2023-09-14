@@ -459,8 +459,9 @@
 ;;(Operar-binarias '(1 suma 4));Deberia imprimir 5
 ;;(Operar-binarias '(1 resta 205));Deberia imprimir -204
 
-(define Operar-binarias
-  (lambda (operacionB)
+
+
+(define (Operar-binarias operacionB)
   (cond
     ((number? operacionB) operacionB) ; Caso base: si es un numero, se retorna el numero
     ((list? operacionB)
@@ -472,7 +473,7 @@
          ((eq? operador 'resta) (- operando1 operando2))
          ((eq? operador 'multiplica) (* operando1 operando2))
          (else ("Operador no valido")))))
-    (else ("Operacion binaria no valida")))))
+    (else ("Operacion binaria no valida"))))
 
 ;;18
 ;; factorial :
