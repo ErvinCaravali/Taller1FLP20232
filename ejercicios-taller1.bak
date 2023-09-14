@@ -12,7 +12,7 @@
 ;;Proposito
 ;; X x Y -> Y' X' Procedimiento que recibe en una lista, y devuelve una lista similar con los pares ordenados invertidos
 ;;
-;;GramÃ¡tica BNF:
+;;Gramática BNF:
 ;;<lista> :=()
 ;;         |(<valor-de-scheme> <lista>)
 ;;
@@ -24,14 +24,14 @@
 ;;(display (invert '((1 2) (1 2) (1 1) (0 1))))
 
 (define (invert lista)
-  ; FunciÃ³n auxiliar para invertir un par (x, y) a (y, x)
+  ; Función auxiliar para invertir un par (x, y) a (y, x)
   (define (invert-pair pair)
     (list (cadr pair) (car pair)))
 
-  ; FunciÃ³n recursiva para invertir una lista de pares
+  ; Función recursiva para invertir una lista de pares
   (define (invert-list lista acumulador)
     (cond
-      [(null? lista) acumulador] ; Si la lista estÃ¡ vacÃ­a, devuelve el acumulador
+      [(null? lista) acumulador] ; Si la lista está vacía, devuelve el acumulador
       [else
        (let ((elemento (car lista)))
          (if (= 2 (length elemento))
@@ -39,14 +39,14 @@
              (begin
                (display "La lista ")
                (display elemento)
-               (display " no es de tamaÃ±o 2")
+               (display " no es de tamaño 2")
                (newline)
                (invert-list (cdr lista) acumulador))))]))
 
-  ; Invierte la lista utilizando la funciÃ³n recursiva invert-list
+  ; Invierte la lista utilizando la función recursiva invert-list
   (reverse (invert-list lista '())))
 
-;;------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
 
 #lang eopl
 
@@ -60,48 +60,48 @@
 ;;filter-in
 ;; 4.
 ;;Proposito
-;; lst x [L] x (P) -> [L'] => P'  EstÃ¡ funciÃ³n filtra los elementos de la lista original segÃºn el criterio proporcionado por el
+;; lst x [L] x (P) -> [L'] => P'  Está función filtra los elementos de la lista original según el criterio proporcionado por el
 ;;predicado y devuelve una lista con esos elementos que cumplen con ese criterio.
 ;;
-;;GramÃ¡tica BNF:
+;;Gramática BNF:
 ;;<lista> :=()
 ;;         |(<valor-de-scheme> <lista>)
 ;;
 ;;Pruebas
-;;(display (filter-in number? '(a 2 (1 3) b 7))) ; Filtra nÃºmeros
-;;(display (filter-in symbol? '(a (b c) 17 foo))) ; Filtra sÃ­mbolos
+;;(display (filter-in number? '(a 2 (1 3) b 7))) ; Filtra números
+;(display (filter-in symbol? '(a (b c) 17 foo))) ; Filtra símbolos
 ;;(display (filter-in string? '(a b u "univalle" "racket" "flp" 28 90 (1 2 3)))) ; Filtra cadenas
 ;;(display (filter-in number? '(a 1 (1 9) c 1)))
 ;;(display (filter-in symbol? '(a b 123 "hola" 'c d 'mundo)))
 
-; DefiniciÃ³n de una funciÃ³n personalizada my-car para obtener el primer elemento de una lista
+; Definición de una función personalizada my-car para obtener el primer elemento de una lista
 (define (my-car lst)
   (if (null? lst)
-      ( "La lista estÃ¡ vacÃ­a")
+      ( "La lista está vacía")
       (car lst)))
 
-; DefiniciÃ³n de una funciÃ³n personalizada my-cdr para obtener el resto de una lista
+; Definición de una función personalizada my-cdr para obtener el resto de una lista
 (define (my-cdr lst)
   (if (null? lst)
-      ( "La lista estÃ¡ vacÃ­a")
+      ( "La lista está vacía")
       (cdr lst)))
 
-; DefiniciÃ³n de la funciÃ³n filter-in que toma un predicado P y una lista L como argumentos
+; Definición de la función filter-in que toma un predicado P y una lista L como argumentos
 (define (filter-in P L)
-  ; DefiniciÃ³n de una funciÃ³n auxiliar llamada filter-helper
+  ; Definición de una función auxiliar llamada filter-helper
   (define (filter-helper P L result)
     (cond
-      ; Si la lista estÃ¡ vacÃ­a, devuelve el resultado invertido
+      ; Si la lista está vacía, devuelve el resultado invertido
       [(null? L) (reverse result)]
-      ; Si el primer elemento cumple con el predicado, consÃ©rvalo y sigue filtrando el resto de la lista
+      ; Si el primer elemento cumple con el predicado, consérvalo y sigue filtrando el resto de la lista
       [(P (my-car L)) (filter-helper P (my-cdr L) (cons (my-car L) result))]
-      ; Si el primer elemento no cumple con el predicado, omÃ­telo y sigue filtrando el resto de la lista
+      ; Si el primer elemento no cumple con el predicado, omítelo y sigue filtrando el resto de la lista
       [else (filter-helper P (my-cdr L) result)]))
 
-  ; Inicializa el resultado como una lista vacÃ­a y llama a la funciÃ³n auxiliar
+  ; Inicializa el resultado como una lista vacía y llama a la función auxiliar
   (filter-helper P L '()))
 
-;;----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
 
 #lang eopl
 
@@ -115,44 +115,44 @@
 ;;cartesian-product
 ;; 7.
 ;;Proposito
-;; lst1 x lst2 x[L1]x[L2] -> [L1][L2]  La funciÃ³n cartesian-product calcula el producto cartesiano entre dos listas, L1 y L2, y devuelve una
+;; lst1 x lst2 x[L1]x[L2] -> [L1][L2]  La función cartesian-product calcula el producto cartesiano entre dos listas, L1 y L2, y devuelve una
 ;; lista de pares ordenados que representan todas las combinaciones posibles de elementos de ambas listas.
 ;;
-;;GramÃ¡tica BNF:
+;;Gramática BNF:
 ;;<lista> :=()
 ;;         |(<valor-de-scheme> <lista>)
 ;;
 ;;Pruebas
 ;;(display "(cartesian-product '(a b c) '(x y)): ")
-;;(display (cartesian-product '(a b c) '(x y))) ; DeberÃ­a imprimir ((a x) (a y) (b x) (b y) (c x) (c y))
+;;(display (cartesian-product '(a b c) '(x y))) ; Debería imprimir ((a x) (a y) (b x) (b y) (c x) (c y))
 ;;(display "(cartesian-product '(p q r) '(5 6 7)): ")
-;;(display (cartesian-product '(p q r) '(5 6 7))) ; DeberÃ­a imprimir ((p 5) (p 6) (p 7) (q 5) (q 6) (q 7) (r 5) (r 6) (r 7))
+;;(display (cartesian-product '(p q r) '(5 6 7))) ; Debería imprimir ((p 5) (p 6) (p 7) (q 5) (q 6) (q 7) (r 5) (r 6) (r 7))
 
 (define (cartesian-product L1 L2)
-  ; FunciÃ³n auxiliar para calcular el producto cartesiano entre dos listas
+  ; Función auxiliar para calcular el producto cartesiano entre dos listas
   (define (product L1 L2)
     (cond
-      [(null? L1) '()] ; Si la primera lista estÃ¡ vacÃ­a, no hay pares que formar
+      [(null? L1) '()] ; Si la primera lista está vacía, no hay pares que formar
       [else
        (append-list (cartesian-pairs (car L1) L2) (product (cdr L1) L2))]))
 
-  ; FunciÃ³n auxiliar para crear pares entre un elemento de L1 y todos los elementos de L2
+  ; Función auxiliar para crear pares entre un elemento de L1 y todos los elementos de L2
   (define (cartesian-pairs x L2)
     (cond
-      [(null? L2) '()] ; Si la segunda lista estÃ¡ vacÃ­a, no hay mÃ¡s pares que formar
+      [(null? L2) '()] ; Si la segunda lista está vacía, no hay más pares que formar
       [else
        (cons (list x (car L2)) (cartesian-pairs x (cdr L2)))]))
 
-  ; FunciÃ³n auxiliar para concatenar listas
+  ; Función auxiliar para concatenar listas
   (define (append-list lst1 lst2)
     (if (null? lst1)
         lst2
         (cons (car lst1) (append-list (cdr lst1) lst2))))
 
-  (product L1 L2)) ; Llama a la funciÃ³n auxiliar product con las dos listas
+  (product L1 L2)) ; Llama a la función auxiliar product con las dos listas
 
 
-;;-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
 
 #lang eopl
 
@@ -166,26 +166,26 @@
 ;;up
 ;; 10.
 ;;Proposito
-;; [L]->[L]: La funciÃ³n up toma una lista L y devuelve una nueva lista donde se han eliminado los parÃ©ntesis del nivel mÃ¡s alto, es decir,
-;;quita los parÃ©ntesis que rodean a los elementos en el nivel superior de la lista. 
+;; [L]->[L]: La función up toma una lista L y devuelve una nueva lista donde se han eliminado los paréntesis del nivel más alto, es decir,
+;;quita los paréntesis que rodean a los elementos en el nivel superior de la lista. 
 ;; 
-;;GramÃ¡tica BNF:
+;;Gramática BNF:
 ;;<lista> :=()
 ;;         |(<valor-de-scheme> <lista>)
 ;;
 ;;Pruebas
-;;(display (up '((1 2) (3 4)))) ; DeberÃ­a imprimir (1 2 3 4)
-;;(display (up '((x (y)) z))) ; DeberÃ­a imprimir (x (y) z)
-;;(display (up '((x (12345) (y)) z))) ;DeberÃ­a imprimir (x 12345 y z)
-;;(display (up '(a '(5*8/3))));DeberÃ­a imprimir (a quote 5*8/3)
+;;(display (up '((1 2) (3 4)))) ; Debería imprimir (1 2 3 4)
+;;(display (up '((x (y)) z))) ; Debería imprimir (x (y) z)
+;;(display (up '((x (12345) (y)) z))) ;Debería imprimir (x 12345 y z)
+;;(display (up '(a '(5*8/3))));Debería imprimir (a quote 5*8/3)
 
 
 
 ; up: Lista -> Lista
-; DefiniciÃ³n de la funciÃ³n up que recibe una lista L y devuelve una lista con parÃ©ntesis removidos del nivel mÃ¡s alto.
+; Definición de la función up que recibe una lista L y devuelve una lista con paréntesis removidos del nivel más alto.
 (define (up L)
   ; procesar-elemento: Elemento -> Lista
-  ; FunciÃ³n auxiliar que procesa un elemento del nivel mÃ¡s alto de la lista.
+  ; Función auxiliar que procesa un elemento del nivel más alto de la lista.
   (define (procesar-elemento elemento)
     (cond
       [(list? elemento) ; Si el elemento es una lista
@@ -193,18 +193,17 @@
       [else (list elemento)])) ; Si el elemento no es una lista, incluirlo tal cual en una lista.
 
   ; procesar-lista: Lista -> Lista
-  ; FunciÃ³n auxiliar que procesa una lista y aplica procesar-elemento a cada elemento de la lista.
+  ; Función auxiliar que procesa una lista y aplica procesar-elemento a cada elemento de la lista.
   (define (procesar-lista lista)
     (cond
-      [(null? lista) '()] ; Si la lista estÃ¡ vacÃ­a, devuelve una lista vacÃ­a.
+      [(null? lista) '()] ; Si la lista está vacía, devuelve una lista vacía.
       [else
        (append (procesar-elemento (car lista)) ; Agregar el resultado de procesar-elemento del primer elemento.
                (procesar-lista (cdr lista)))])) ; Llamar recursivamente a procesar-lista con el resto de la lista.
 
   (procesar-lista L)) ; Procesa la lista completa.
 
-
-;;---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
 
 #lang eopl
 
@@ -218,20 +217,17 @@
 ;;(operate lrators lrands)
 ;; 13.
 ;;Proposito
-;; [Irators]x[Irands]->[Irators][Irands]: la funciÃ³n operate calcula el resultado de aplicar sucesivamente operadores binarios a los
+;; [Irators]x[Irands]->[Irators][Irands]: la función operate calcula el resultado de aplicar sucesivamente operadores binarios a los
 ;;operandos proporcionados, siguiendo el orden de los operadores en lrators.
 ;; 
-;;GramÃ¡tica BNF:
+;;Gramática BNF:
 ;;<lista> :=()
 ;;         |(<valor-de-scheme> <lista>)
 ;;
 ;;Pruebas
 ;;(display (operate (list + * + - *) '(1 2 8 4 11 6))) ; Debe imprimir 102
-;;(newline)
 ;;(display (operate (list *) '(4 5))) ; Debe imprimir 20
-;;(newline)
 ;;(display (operate (list - / +) '(10 2 5 3))) ; Debe imprimir 0
-;;(newline)
 ;;(display (operate (list * + - /) '(3 2 4 2 2))) ; Debe imprimir 6
 
 (define (operate lrators lrands)
@@ -247,8 +243,7 @@
 
   (apply-operators lrators lrands))
 
-
-;;-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
 #lang eopl
 
@@ -262,36 +257,29 @@
 ;;(Operar-binarias operacionB)
 ;; 16.
 ;;Proposito
-;; (operador)x(operando1)x(operando2)->(operacionB):La funciÃ³n operate realiza una serie de cÃ¡lculos binarios sucesivos segÃºn los operadores y operandos proporcionados.
+;; (operador)x(operando1)x(operando2)->(operacionB):La función operate realiza una serie de cálculos binarios sucesivos según los operadores y operandos proporcionados.
 ;; 
-;;GramÃ¡tica BNF:
+;;Gramática BNF:
 ;;<OperacionB>::= <int>
-;;::= (<OperacionB> â€™suma <OperacionB>)
-;;::= (<OperacionB> â€™resta <OperacionB>)
-;;::= (<OperacionB> â€™multiplica <OperacionB>)
+;;::= (<OperacionB> ’suma <OperacionB>)
+;;::= (<OperacionB> ’resta <OperacionB>)
+;;::= (<OperacionB> ’multiplica <OperacionB>)
 ;;
 ;;
 ;;Pruebas
 ;;(display (Operar-binarias 4)) ; Debe imprimir 4
-;;(newline)
 ;;(display (Operar-binarias '(2 suma 9))) ; Debe imprimir 11
-;;(newline)
 ;;(display (Operar-binarias '(2 resta 9))) ; Debe imprimir -7
-;;(newline)
 ;;(display (Operar-binarias '(2 multiplica 9))) ; Debe imprimir 18
-;;(newline)
 ;;(display (Operar-binarias '(6 resta (2 suma (3 multiplica 4)))));Debe imprimir -8
-;;(newline)
 ;;(display (Operar-binarias '(3 resta (4 suma 2)))) ; Debe imprimir -3
 ;;(display (Operar-binarias '((2 multiplica 3) suma (5 resta 1))))
-;;(newline)
 ;;(display (Operar-binarias '((2 multiplica (4 suma 1))multiplica((2 multiplica 4) resta 1))))
-
 
 
 (define (Operar-binarias operacionB)
   (cond
-    ((number? operacionB) operacionB) ; Caso base: si es un nÃºmero, se retorna el nÃºmero
+    ((number? operacionB) operacionB) ; Caso base: si es un número, se retorna el número
     ((list? operacionB)
      (let* ((operador (cadr operacionB))
             (operando1 (Operar-binarias (car operacionB)))
@@ -300,7 +288,10 @@
          ((eq? operador 'suma) (+ operando1 operando2))
          ((eq? operador 'resta) (- operando1 operando2))
          ((eq? operador 'multiplica) (* operando1 operando2))
-         (else ("Operador no vÃ¡lido")))))
-    (else ("OperaciÃ³n binaria no vÃ¡lida"))))
+         (else ("Operador no válido")))))
+    (else ("Operación binaria no válida"))))
+
+
+
 
 
