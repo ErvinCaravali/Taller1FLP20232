@@ -486,7 +486,7 @@ Casos prueba:
 
 ;;14
 ;;path
-;;Proposito:
+;;Proposito;
 ;;devuelve una lista de "left" y "right" que te guía a través del árbol desde la raíz hasta el nodo que contiene n.
 #|
 1. (path 17 '(14 (7 () (12 () ()))
