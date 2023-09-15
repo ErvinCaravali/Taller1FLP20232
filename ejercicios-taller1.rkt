@@ -47,6 +47,25 @@
   ; Invierte la lista utilizando la función recursiva invert-list
   (reverse (invert-list lista '())))
 
+  ;;2
+;;down
+;;Proposito:
+;;Recibe una lista de objetos y los retorna dentro de paréntesis
+;;Casos de prueba:
+;; 1. (down '(1 2 3 4)) => '((1) (2) (3) (4))
+;; 2. (down '()) => '()
+;; 3. (down '(a b c d e f g h i j)) => '((a) (b) (c) (d) (e) (f) (g) (h) (i) (j))
+;; 4. (down '(un (objeto (mas)) complicado)) => '((un) ((objeto (mas))) (complicado))
+;; 5. (down '(Es que ( yo (soy)) Batman )) => '((Es) (que) ((yo (soy))) (Batman))
+
+
+(define down
+  (lambda (lista)
+    (if (null? lista)  ;;Si recibe una lista vacia 
+        '()            ;;Retorna solo los paréntesis
+        (cons (list (car lista)) ;;Le coloca () al primer elemento 
+              (down (cdr lista)))))) ;;
+
 ;;3
 ;; list-set:
 ;; Proposito:
@@ -120,6 +139,31 @@
         "La lista está vacía"
         (cdr lst))))
 
+;;5
+;;list-index
+;;Proposito:
+#|
+Tomar un predicado P de una lista L, si satisface devuleve la posicion del primer elemento
+sino devuelve #f
+|#
+;;Casos de prueba:
+#|
+1. (list-index number? '(a 2 (1 3) b 7)) => 1
+2. (list-index symbol? '(a (b c) 17 foo)) => 0
+3. (list-index symbol? '(1 2 (a b) 3)) => #f
+4. (list-index number? '(a c (1 3) b 7)) => 4
+5. (list-index symbol? '(3 66 (2 4) foo 55)) => 3
+|#
+
+(define (list-index P L)
+  (define (auxiliar L index check-func)
+    (if (null? L)
+        #f
+        (if (check-func (car L))
+            index
+            (auxiliar (cdr L) (+ index 1) check-func))))
+  
+  (auxiliar L 0 (lambda (x) (P x))))
 
 ;;6
 ;; my-map :
@@ -213,7 +257,26 @@
 
     (product L1 L2))) ; Llama a la función auxiliar product con las dos listas
 
+;;8
+;;mapping
+;;Proposito:
+;; Crear un mapeo entre 2 listas
+;;Casos prueba:
+#|
+ 1. (mapping (lambda (d) (* d 2)) (list 1 2 3) (list 2 4 6)) => '((1 2) (2 4) (3 6))
+ 2. (mapping (lambda (d) (+ d 1)) (list 1 2 3) (list 2 3 4)) => '((1 2) (2 3) (3 4))
+ 3. (mapping (lambda (d) (+ d 1)) (list 1 2 3) (list 2 3 4)) => '((1 2) (2 3) (3 4))
+ 4. (mapping (lambda (d) (* d 3)) (list 1 2 2) (list 2 4 6)) => '(2 6)
+ 5.(mapping (lambda (d) (* d 2)) (list 1 2 3) (list 3 9 12)) => '()
+|#
 
+(define (mapping F L1 L2)
+  (if (or (null? L1) (null? L2))
+      '()
+      (if (= ((lambda (x) (F x)) (car L1)) (car L2))
+          (cons (list (car L1) (car L2))
+                (mapping F (cdr L1) (cdr L2)))
+          (mapping F (cdr L1) L2))))
 
 ;;9
 ;; count-inversions :
@@ -317,6 +380,24 @@
 
     (procesar-lista L))) ; Procesa la lista completa.
 
+;;11
+;;zip
+;;Proposito:
+;;Combinar 2 listas con las que se pueda hacer una operacion es especifico
+#|
+Casos prueba:
+(zip + '(1 4) '(6 2)) => '(7 6)
+(zip * '(11 5 6) '(10 9 8)) => '(110 45 48)
+(zip + '(1 2 3) '(4 5 6)) => '(5 7 9)
+(zip - '(10 20 30) '(2 4 6)) => '(8 16 24)
+(zip * '(1 2 3) '(2 3 4)) => '(2 6 12)
+|#
+
+(define (zip F L1 L2)
+  (if (or (null? L1) (null? L2))
+      '()
+      (cons ((lambda (x y) (F x y)) (car L1) (car L2))
+            (zip F (cdr L1) (cdr L2)))))
 
 ;; 12
 ;; my-filter :
@@ -403,6 +484,39 @@
 
   ))
 
+;;14
+;;path
+;;Proposito:
+;;devuelve una lista de "left" y "right" que te guía a través del árbol desde la raíz hasta el nodo que contiene n.
+#|
+1. (path 17 '(14 (7 () (12 () ()))
+(26 (20 (17 () ())
+())
+(31 () ())))) => '(right left left)
+2. (path 14 '(14 () ())) => '()
+3. (path 12 '(14 (7 () ()) => '(left)
+(12 () ())))
+4. (path 20 '(14 (7 () ()) => '(right left)
+ (26 (20 (17 () ())
+ ()) (31 () ()))))
+5. (path 15 '(14 (7 () ()) => '()
+(26 (20 (17 () ()) ())
+ (31 () ()))))
+|#
+
+(define (path n BST)
+  (define (auxiliar-path tree path-so-far)
+    (cond
+      ((null? tree) '())                
+      (((lambda (x) (= x n)) (car tree)) path-so-far)   
+      (((lambda (x) (< x n)) (car tree))             
+       (auxiliar-path (cadr tree) (append path-so-far '(left))))
+      (else                             
+       (auxiliar-path (caddr tree) (append path-so-far '(right))))))
+  
+  (if (null? BST)
+      '()                               
+      (auxiliar-path BST '())))
 
 ;;15
 ;; count-odd-and-even :
@@ -473,6 +587,31 @@
          ((eq? operador 'multiplica) (* operando1 operando2))
          (else ("Operador no valido")))))
     (else ("Operacion binaria no valida")))))
+
+;;17
+;;prod-scalar-matriz mat vec
+;;Proposito:
+;;
+#|
+Casos prueba:
+1. (prod-scalar-matriz '((1 1) (2 2)) '(2 3)) => '((2 3) (4 6))
+2. (prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3)) => '((2 3) (4 6) (6 9))
+3. (prod-scalar-matriz '((1 1) (2 2)) '(2 3)) => '((2 3) (4 6))
+4. (prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3)) => '((2 3) (4 6) (6 9))
+5. (prod-scalar-matriz '((4 5 6) (7 8 9) (10 11 12)) '(1 2 3)) => '((4 10 18) (7 16 27) (10 22 36))
+|#
+
+(define (prod-scalar-matriz mat vec)
+  (define (producto-escalar row vec)
+    (if (null? row)
+        '()
+        (cons ((lambda (x y) (* x y)) (car row) (car vec))
+              (producto-escalar (cdr row) (cdr vec)))))
+  
+  (if (null? mat)
+      '()
+      (cons (producto-escalar (car mat) vec)
+            (prod-scalar-matriz (cdr mat) vec))))    
 
 ;;18
 ;; factorial :
